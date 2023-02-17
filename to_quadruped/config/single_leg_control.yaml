@@ -1,0 +1,26 @@
+single_leg:
+    # Publish all joint states -----------------------------------
+    joint_state_controller:
+        type: joint_state_controller/JointStateController
+        publish_rate: 1000  
+
+    # FR Controllers ---------------------------------------
+    FR_hip_controller:
+        type: unitree_legged_control/UnitreeJointController
+        # type: effort_controllers/JointEffortController
+        joint: FR_hip_joint
+        pid: {p: 100.0, i: 0.0, d: 5.0}
+
+    FR_thigh_controller:
+        type: unitree_legged_control/UnitreeJointController
+        # type: effort_controllers/JointEffortController
+        joint: FR_thigh_joint
+        pid: {p: 300.0, i: 0.0, d: 8.0}
+
+    FR_calf_controller:
+        type: unitree_legged_control/UnitreeJointController
+        # type: effort_controllers/JointEffortController
+        joint: FR_calf_joint
+        pid: {p: 300.0, i: 0.0, d: 8.0}
+
+   

@@ -24,7 +24,7 @@
           args="-urdf -z 0.6 -model aliengo_gazebo -param robot_description -unpause"/>
 
     <rosparam file="$(find to_quadruped)/config/torques_exerted.yaml" command="load"/> 
-    <rosparam file="$(find unitree_gazebo)/config/robot_control.yaml" command="load"/>
+    <rosparam file="$(find to_quadruped)/config/robot_control.yaml" command="load"/>
 
     <node pkg="controller_manager" type="spawner" name="controller_spawner" respawn="false"
           output="screen" ns="/aliengo_gazebo" args="joint_state_controller
