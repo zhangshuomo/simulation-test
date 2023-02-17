@@ -1,0 +1,17 @@
+<launch>
+
+    <param name="robot_description" textfile="$(find to_quadruped)/urdf/single_leg.urdf" />
+    
+    <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+
+    <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model mymodel -param robot_description"  />
+    <rosparam file="$(find to_quadruped)/config/single_leg_control.yaml" command="load"/>
+    
+    <node pkg="controller_manager" type="spawner" name="controller_spawner" respawn="false"
+          output="screen" ns="/single_leg" args="joint_state_controller
+          FR_hip_controller FR_thigh_controller FR_calf_controller"/>  
+
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+        <remap from="/joint_states" to="/single_leg/joint_states"/>
+    </node>
+</launch>

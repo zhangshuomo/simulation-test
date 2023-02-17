@@ -1,0 +1,202 @@
+<?xml version="1.0"?>
+<robot name="pole">
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/single_leg</robotNamespace>
+    </plugin>
+  </gazebo>
+
+  <link name="world"/>
+
+  <link name="slideBar">
+    <visual>
+      <geometry>
+        <box size="300 0.05 0.05"/>
+      </geometry>
+      <origin xyz="0 0 0"/>
+      <material name="grey">
+        <color rgba="0.75 0.75 0.75 0.8"/>
+      </material>
+    </visual>
+    <inertial>
+      <mass value="90.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="world_to_slideBar" type="fixed">
+    <parent link="world"/>
+    <child link="slideBar"/>
+    <origin xyz="0.0 0.0 2.0"/>
+  </joint>
+
+  <link name="cart">
+    <visual>
+      <geometry>
+        <box size="0.2 0.2 0.2"/>
+      </geometry>
+      <origin xyz="0 0 0"/>
+      <material name="grey">
+        <color rgba="0.75 0.75 0.75 0.8"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+          <box size="0.0 0.0 0.0"/>
+      </geometry>
+      <origin xyz="0 0 0"/>
+    </collision>
+    <inertial>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+
+  <joint name="slider_to_cart" type="fixed">
+    <origin xyz="0.0 0.0 0.0"/>
+    <parent link="slideBar"/>
+    <child link="cart"/>
+  </joint>
+
+  <joint name="FR_hip_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0.2407 -0.051 0"/>
+    <parent link="cart"/>
+    <child link="FR_hip"/>
+    <axis xyz="1 0 0"/>
+    <dynamics damping="0" friction="0"/>
+    <limit effort="35.278" lower="-1000" upper="1000" velocity="10000"/>
+  </joint>
+  <link name="FR_hip">
+    <visual>
+      <origin rpy="3.141592653589793 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://unitree_gazebo/meshes/hip.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 -0.083 0"/>
+      <geometry>
+        <cylinder length="0.0" radius="0.0"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.022191 -0.015144 -1.5e-05"/>
+      <mass value="1.993"/>
+      <inertia ixx="0.002903894" ixy="7.185e-05" ixz="-1.262e-06" iyy="0.004907517" iyz="1.75e-06" izz="0.005586944"/>
+    </inertial>
+  </link>
+  
+  <joint name="FR_thigh_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 -0.0868 0"/>
+    <parent link="FR_hip"/>
+    <child link="FR_thigh"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0" friction="0"/>
+    <limit effort="35.278" lower="-1000" upper="1000" velocity="10000"/>
+  </joint>
+  <link name="FR_thigh">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://unitree_gazebo/meshes/thigh_mirror.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin rpy="0 1.5707963267948966 0" xyz="0 0 -0.125"/>
+      <geometry>
+        <box size="0.0 0.0 0.0"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="-0.005607 0.003877 -0.048199"/>
+      <mass value="0.639"/>
+      <inertia ixx="0.005666803" ixy="-3.597e-06" ixz="0.000491446" iyy="0.005847229" iyz="-1.0086e-05" izz="0.000369811"/>
+    </inertial>
+  </link>
+  <joint name="FR_calf_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 -0.25"/>
+    <parent link="FR_thigh"/>
+    <child link="FR_calf"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0" friction="0"/>
+    <limit effort="44.4" lower="-1000" upper="1000" velocity="10000"/>
+  </joint>
+  <link name="FR_calf">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://unitree_gazebo/meshes/calf.dae" scale="1 1 1"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin rpy="0 1.5707963267948966 0" xyz="0 0 -0.125"/>
+      <geometry>
+        <box size="0.0 0.0 0.0"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0.002781 6.3e-05 -0.142518"/>
+      <mass value="0.207"/>
+      <inertia ixx="0.006341369" ixy="-3e-09" ixz="-8.7951e-05" iyy="0.006355157" iyz="-1.336e-06" izz="3.9188e-05"/>
+    </inertial>
+  </link>
+  <joint name="FR_foot_fixed" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 -0.25"/>
+    <parent link="FR_calf"/>
+    <child link="FR_foot"/>
+  </joint>
+  <link name="FR_foot">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0165"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <sphere radius="0.0"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.06"/>
+      <inertia ixx="1.6853999999999998e-05" ixy="0.0" ixz="0.0" iyy="1.6853999999999998e-05" iyz="0.0" izz="1.6853999999999998e-05"/>
+    </inertial>
+  </link>
+  <transmission name="FR_hip_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="FR_hip_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="FR_hip_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="FR_thigh_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="FR_thigh_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="FR_thigh_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="FR_calf_tran">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="FR_calf_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="FR_calf_motor">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+</robot>
+
+
